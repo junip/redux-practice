@@ -1,52 +1,39 @@
 import React from 'react';
-import { createStore } from 'redux'
-import { Provider } from 'react-redux'
+import { connect } from 'react-redux'
 
-const Counter = () => {
-  let initialState = {
-    counter: 0
+const increment = () => ({
+  type: 'INCREMENT',
+  payload: 1
+})
+
+const decrement = () => ({
+  type: 'DECREMENT',
+  payload: 1
+})
+
+// const mapDispatchToProps = dispatch => {
+//   return {
+//     increment: () => dispatch(increment()),
+//     decrement: () => dispatch(decrement()),
+//     reset: () => dispatch(reset())
+//   }
+// }
+const mapStateToProps = state => {
+  return {
+    count: state.count
   }
-  const counterReducer = (state = initialState, action) => {
-    switch (action.type) {
-      case 'INCREMENT':
-        return {
-          ...state,
-          counter: state.counter + 1
-        }
-      case 'DECREMENT':
-        return {
-          ...state,
-          counter: state.counter - 1
-        }
-      default:
-          return state
-    }
-  }
-
-  let store = createStore(counterReducer)
-
-
-  const increment = () => {
-    store.dispatch({ type: 'INCREMENT' })
-  }
-
-  const decrement = () => {
-    store.dispatch({ type: 'DECREMENT' })
-  }
-
-  store.subscribe(() => console.log(store.getState()))
-
-  return(
-    <Provider store={store}>
-      <>
-      <button onClick={() => increment() }>INCREMENT</button>
-      <button>{store.getState().counter}</button>
-      <button onClick={() => decrement() }>DECREMENT</button>
-      </>
-    </Provider>
-  )
-
-
 }
 
-export default Counter;
+const Counter = ({count, increment, decrement}) => {
+  return (
+    <>
+    <button onClick={()=> {increment()}}>INCREMENT</button>
+    <button>{count}</button>
+    <button onClick={()=> {decrement()}}>DECREMENT</button>
+    </>
+  )
+}
+
+
+// dispat
+export default connect(mapStateToProps, {increment, decrement})(Counter)
